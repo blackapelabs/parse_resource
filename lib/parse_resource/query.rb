@@ -28,7 +28,7 @@ class Query
     criteria[:limit] = limit
     self
   end
-  
+
   def include_object(parent)
     criteria[:include] ||= []
 
@@ -41,7 +41,7 @@ class Query
     end
     self
   end
-  
+
   def order(attr)
     orders = attr.split(" ")
     if orders.count > 1
@@ -123,7 +123,7 @@ class Query
     return chunk_results(params) if criteria[:chunk]
 
     resp = @klass.resource.get(:params => params)
-    
+
     if criteria[:count] == 1
       results = JSON.parse(resp)['count']
       return results.to_i
@@ -155,11 +155,11 @@ class Query
 
   def chunk_results(params={})
     criteria[:limit] ||= 100
-    
+
     start_row = criteria[:skip].to_i
     end_row = [criteria[:limit].to_i - start_row - 1, 1].max
     result = []
-    
+
     # Start at start_row, go to end_row, get results in chunks
     (start_row..end_row).each_slice(criteria[:chunk].to_i) do |slice|
       params[:skip] = slice.first
